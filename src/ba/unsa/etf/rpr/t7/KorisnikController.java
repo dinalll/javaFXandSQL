@@ -26,6 +26,7 @@ public class KorisnikController {
         listKorisnici.getSelectionModel().selectedItemProperty().addListener((obs, oldKorisnik, newKorisnik) -> {
             model.setTrenutniKorisnik(newKorisnik);
             listKorisnici.refresh();
+            if(oldKorisnik!=null){System.out.println(oldKorisnik.getIme());model.updateBazu(oldKorisnik);}
          });
 
         model.trenutniKorisnikProperty().addListener((obs, oldKorisnik, newKorisnik) -> {
@@ -49,6 +50,7 @@ public class KorisnikController {
                 fldEmail.textProperty().bindBidirectional( newKorisnik.emailProperty() );
                 fldUsername.textProperty().bindBidirectional( newKorisnik.usernameProperty() );
                 fldPassword.textProperty().bindBidirectional( newKorisnik.passwordProperty() );
+                listKorisnici.refresh();
             }
         });
 
@@ -107,7 +109,11 @@ public class KorisnikController {
         model.getKorisnici().add(new Korisnik("", "", "", "", ""));
         listKorisnici.getSelectionModel().selectLast();
     }
-
+    public void obrisiAction(ActionEvent actionEvent){
+        model.obrisi(model.getTrenutniKorisnik());
+        model.napuni();
+        listKorisnici.refresh();
+    }
     public void krajAction(ActionEvent actionEvent) {
         System.exit(0);
     }
