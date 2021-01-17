@@ -4,13 +4,13 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class Korisnik {
     private SimpleStringProperty ime, prezime, email, username, password;
-
+    private int id;
     public Korisnik(String ime, String prezime, String email, String username, String password) {
         this.ime = new SimpleStringProperty(ime);
         this.prezime = new SimpleStringProperty(prezime);
         this.email = new SimpleStringProperty(email);
         this.username = new SimpleStringProperty(username);
-        this.password = new SimpleStringProperty(password);
+        this.password = new SimpleStringProperty(password);;
     }
 
     @Override
@@ -78,5 +78,7 @@ public class Korisnik {
         this.password.set(password);
     }
 
-
+    public int getId() {
+        return id;
+    }
 }

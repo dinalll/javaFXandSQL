@@ -2,9 +2,20 @@ package ba.unsa.etf.rpr.t7;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.stage.Window;
+
+import javax.swing.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class KorisnikController {
     public TextField fldIme;
@@ -104,6 +115,13 @@ public class KorisnikController {
             }
         });
     }
+    public void saveAction(ActionEvent actionEvent){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Password", "*.passwd"));
+        File file=fileChooser.showSaveDialog(listKorisnici.getScene().getWindow());
+        if(file!=null)model.zapisiDatoteku(file);
+        }
 
     public void dodajAction(ActionEvent actionEvent) {
         model.getKorisnici().add(new Korisnik("", "", "", "", ""));
@@ -117,4 +135,5 @@ public class KorisnikController {
     public void krajAction(ActionEvent actionEvent) {
         System.exit(0);
     }
+
 }

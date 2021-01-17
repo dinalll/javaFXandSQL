@@ -4,9 +4,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.sql.*;
 import java.util.Scanner;
 
@@ -14,7 +12,7 @@ public class KorisniciModel {
     private Connection conn;
     private ObservableList<Korisnik> korisnici = FXCollections.observableArrayList();
     private SimpleObjectProperty<Korisnik> trenutniKorisnik = new SimpleObjectProperty<>();
-    private PreparedStatement ucitajIzBaze,obrisiKorisnika,updateBazu;
+    private PreparedStatement ucitajIzBaze,obrisiKorisnika,updateBazu,queryId;
 
     public KorisniciModel() {
         String url = "jdbc:sqlite:korisnici.db";
@@ -23,6 +21,8 @@ public class KorisniciModel {
             ucitajIzBaze = conn.prepareStatement("Select * from korisnik");
             obrisiKorisnika = conn.prepareStatement("Delete from korisnik where username=?");
             updateBazu= conn.prepareStatement("Update korisnik set ime=?,prezime=?,email=?,username=?,password=? where username=?");
+            queryId=conn.prepareStatement("Select korisnik_id from korisnik where username=?");
+
 
         } catch (SQLException throwables) {
             System.out.println("Greska u pri konektovanju na bazu korisnici.db");
@@ -87,7 +87,6 @@ public class KorisniciModel {
     }
     public void updateBazu(Korisnik k){
         try {
-            System.out.println(k.getIme()+k.getPrezime()+k.getUsername());
             updateBazu.setString(1,k.getIme());
             updateBazu.setString(2,k.getPrezime());
             updateBazu.setString(3,k.getEmail());
@@ -98,6 +97,9 @@ public class KorisniciModel {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+    public void obrisiIzBaze(Korisnik k){
+
     }
     public void diskonektuj() {
         try {
@@ -141,5 +143,34 @@ public class KorisniciModel {
             throwables.printStackTrace();
         }
     }
+    public void zapisiDatoteku(File file){
+        if(file==null)return;
+        try {
+            FileWriter pisi= new FileWriter(file);
+            String upisi="";
+            for(Korisnik korisnik: korisnici){
+                upisi += (korisnik.getUsername() + ":" + korisnik.getPassword() + ":" + queryDajId(korisnik) + ":" + queryDajId(korisnik) +
+                        ":" + korisnik.getIme() + " " + korisnik.getPrezime() + "::\n");
+            }
+            pisi.write(upisi);
+            pisi.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Greska prilikom pisanja file-a");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public int queryDajId(Korisnik korisnik){
+        int povratni=0;
+        try {
+            queryId.setString(1,korisnik.getUsername());
+            ResultSet rs=queryId.executeQuery();
+            povratni=rs.getInt(1);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return povratni;
+    }
+
 
 }
