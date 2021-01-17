@@ -10,12 +10,14 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import net.sf.jasperreports.engine.JRException;
 
 import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Locale;
 
 public class KorisnikController {
     public TextField fldIme;
@@ -37,7 +39,7 @@ public class KorisnikController {
         listKorisnici.getSelectionModel().selectedItemProperty().addListener((obs, oldKorisnik, newKorisnik) -> {
             model.setTrenutniKorisnik(newKorisnik);
             listKorisnici.refresh();
-            if(oldKorisnik!=null){System.out.println(oldKorisnik.getIme());model.updateBazu(oldKorisnik);}
+            if(oldKorisnik!=null){model.updateBazu(oldKorisnik);}
          });
 
         model.trenutniKorisnikProperty().addListener((obs, oldKorisnik, newKorisnik) -> {
@@ -132,8 +134,24 @@ public class KorisnikController {
         model.napuni();
         listKorisnici.refresh();
     }
+    public void izvjestajAction(ActionEvent actionEvent) {
+        try {
+            new Izvjestaj().showReport(model.getConn());
+        } catch (JRException e1) {
+            e1.printStackTrace();
+        }
+    }
+    public void bosanskiAction(ActionEvent actionEvent){
+        Locale.setDefault(new Locale("bs", "BA"));
+        System.out.println("POZVAN");
+
+    }
+    public void englishAction(ActionEvent actionEvent){
+        Locale.setDefault(new Locale("en", "en_US"));
+    }
     public void krajAction(ActionEvent actionEvent) {
         System.exit(0);
     }
+
 
 }

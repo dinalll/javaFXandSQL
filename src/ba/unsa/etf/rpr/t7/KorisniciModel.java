@@ -173,4 +173,7 @@ public class KorisniciModel {
     }
 
 
+    public Connection getConn() {
+        return conn;
+    }
 }
