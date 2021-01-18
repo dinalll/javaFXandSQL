@@ -22,7 +22,6 @@ public class Main extends Application {
         model.napuni();
         KorisnikController ctrl = new KorisnikController(model);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/korisnici.fxml"),bundle);
-
         loader.setController(ctrl);
         Parent root = loader.load();
         primaryStage.setTitle("Korisnici");

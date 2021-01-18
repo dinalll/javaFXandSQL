@@ -22,8 +22,6 @@ public class KorisniciModel {
             obrisiKorisnika = conn.prepareStatement("Delete from korisnik where username=?");
             updateBazu= conn.prepareStatement("Update korisnik set ime=?,prezime=?,email=?,username=?,password=? where username=?");
             queryId=conn.prepareStatement("Select korisnik_id from korisnik where username=?");
-
-
         } catch (SQLException throwables) {
             System.out.println("Greska u pri konektovanju na bazu korisnici.db");
         }

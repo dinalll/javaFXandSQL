@@ -1,4 +1,6 @@
-/*package ba.unsa.etf.rpr.t7;
+/*
+package ba.unsa.etf.rpr.t7;
+
 
 import org.junit.jupiter.api.Test;
 import org.testfx.api.FxRobot;
@@ -75,4 +77,4 @@ public class Zadatak7Test {
         }
     }
 }
- */
+*/

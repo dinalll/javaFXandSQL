@@ -2,22 +2,27 @@ package ba.unsa.etf.rpr.t7;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import net.sf.jasperreports.engine.JRException;
 
-import javax.swing.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Locale;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class KorisnikController {
     public TextField fldIme;
@@ -26,15 +31,17 @@ public class KorisnikController {
     public TextField fldUsername;
     public ListView<Korisnik> listKorisnici;
     public PasswordField fldPassword;
-
+    public Image imageBtn;
+    public ImageView imageView;
     private KorisniciModel model;
 
     public KorisnikController(KorisniciModel model) {
         this.model = model;
     }
-
     @FXML
     public void initialize() {
+        imageBtn=(new Image(getClass().getResourceAsStream("/images/face-smile.png")));
+        imageView.setImage(imageBtn);
         listKorisnici.setItems(model.getKorisnici());
         listKorisnici.getSelectionModel().selectedItemProperty().addListener((obs, oldKorisnik, newKorisnik) -> {
             model.setTrenutniKorisnik(newKorisnik);
@@ -143,7 +150,19 @@ public class KorisnikController {
     }
     public void bosanskiAction(ActionEvent actionEvent){
         Locale.setDefault(new Locale("bs", "BA"));
-        System.out.println("POZVAN");
+
+    }
+    public void ucitajSlikeAction() throws IOException {
+        Locale.setDefault(new Locale("en", "en_US"));
+        ResourceBundle bundle= ResourceBundle.getBundle("Translation");
+        PretragaController ctrl = new PretragaController();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/pretraga.fxml"),bundle);
+        loader.setController(ctrl);
+        Parent root = loader.load();
+        Stage primaryStage= new Stage();
+        primaryStage.setTitle("Pretraga");
+        primaryStage.setScene(new Scene(root, 140*5, 140*5));
+        primaryStage.show();
 
     }
     public void englishAction(ActionEvent actionEvent){
